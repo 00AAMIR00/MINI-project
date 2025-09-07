@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Page</title>
+  <link href="img/favicon.ico" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #1dbf73;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #1dbf73;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .toggle {
+      margin-top: 1rem;
+      text-align: center;
+      cursor: pointer;
+      color: #007bff;
+      font-size: 0.9rem;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="form-title">Login</h2>
+
+    <form id="authForm">
+      <input type="text" id="username" placeholder="Enter Username" required />
+      <input type="email" id="email" placeholder="Enter Email" class="hidden" />
+      <input type="password" id="password" placeholder="Enter Password" required />
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" class="hidden" />
+      <button type="submit" id="submitBtn">Login</button>
+    </form>
+
+    <div class="toggle" id="toggleForm">Don't have an account? Register</div>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    const formTitle = document.getElementById("form-title");
+    const toggleForm = document.getElementById("toggleForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const message = document.getElementById("message");
+
+    const emailInput = document.getElementById("email");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+
+    let isLogin = true;
+
+    toggleForm.addEventListener("click", () => {
+      isLogin = !isLogin;
+      if (isLogin) {
+        formTitle.textContent = "Login";
+        submitBtn.textContent = "Login";
+        toggleForm.textContent = "Don't have an account? Register";
+        emailInput.classList.add("hidden");
+        confirmPasswordInput.classList.add("hidden");
+      } else {
+        formTitle.textContent = "Register";
+        submitBtn.textContent = "Register";
+        toggleForm.textContent = "Already have an account? Login";
+        emailInput.classList.remove("hidden");
+        confirmPasswordInput.classList.remove("hidden");
+      }
+      message.textContent = "";
+    });
+
+    document.getElementById("authForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const email = emailInput.value.trim();
+      const password = document.getElementById("password").value.trim();
+      const confirmPassword = confirmPasswordInput.value.trim();
+
+      if (isLogin) {
+        if (!username || !password) {
+          message.textContent = " Please fill in all fields.";
+          return;
+        }
+        message.textContent = " Login successful! (demo only)";
+      } else {
+        if (!username || !email || !password || !confirmPassword) {
+          message.textContent = " Please fill in all fields.";
+          return;
+        }
+        if (password !== confirmPassword) {
+          message.textContent = " Passwords do not match.";
+          return;
+        }
+        localStorage.setItem("user", JSON.stringify({ username, email, password }));
+        message.textContent = " Registration successful! Please login.";
+        // Switch back to login
+        isLogin = true;
+        formTitle.textContent = "Login";
+        submitBtn.textContent = "Login";
+        toggleForm.textContent = "Don't have an account? Register";
+        emailInput.classList.add("hidden");
+        confirmPasswordInput.classList.add("hidden");
+      }
+    });
+  </script>
+<div class="social-login">
+  <a href="/auth/google" class="social-btn google">
+    <img src="img/google image.png" alt="Google">
+  </a>
+  <a href="/auth/github" class="social-btn github">
+    <img src="img/1.png" alt="GitHub"> 
+  </a>
+</div>
+
+<style>
+.social-login {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: transform 0.2s;
+}
+.social-btn:hover {
+  transform: scale(1.1);
+}
+.social-btn img {
+  width: 24px;
+  height: 24px;
+}
+</style>
+
+
+</body>
+</html>
